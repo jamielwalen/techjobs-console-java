@@ -1,8 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -55,19 +53,26 @@ public class TechJobs {
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
-
                 // What is their search term?
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
+
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
-                } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    printJobs(JobData.findByValue(searchTerm));
+                }else {
+                    ArrayList<HashMap<String, String>> foundTerm = JobData.findByColumnAndValue(searchField, searchTerm);
+                    if(foundTerm.isEmpty()) {
+                        System.out.println("No jobs found");
+                    }else {
+                        printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    }
+                }
+
                 }
             }
         }
-    }
+
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -108,9 +113,38 @@ public class TechJobs {
         return choiceKeys[choiceIdx];
     }
 
+
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+        int i = 0;
+        do {
+            Set<String> key = someJobs.get(i).keySet();
+            Collection<String> values2 = someJobs.get(i).values();
+                    int a = 0;
+                    for (String keys: key) {
+                        if (a==0) {
+                            System.out.println("*****");
+                        }
+                        String value = (String) values2.toArray()[a];
+                        System.out.println(keys +" : " + value);
+                        ++ a;
+                        ++i;
+                        if (a==key.size()) {
+                            System.out.println("*****" + "\n");
+                        }
 
-        System.out.println("printJobs is not implemented yet");
+
+                    }
+                }while (i < someJobs.size());
+
+
+
     }
 }
+
+
+
+
+
+
+

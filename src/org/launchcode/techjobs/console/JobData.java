@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -41,7 +39,7 @@ public class JobData {
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
-        }
+        } Collections.sort(values);
 
         return values;
     }
@@ -57,12 +55,12 @@ public class JobData {
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
+     * <p>
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param column Column that should be searched.
+     * @param value  Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -125,4 +123,70 @@ public class JobData {
         }
     }
 
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        // load data, if not already loaded
+        loadData();
+        int i = 0;
+        int b = 0;
+
+        int c = 0;
+        int d = 0;
+
+        ArrayList<Collection<String>> values2 = new ArrayList();
+        Set<String> keys = allJobs.get(i).keySet();
+
+
+        do {
+            Collection<String> values = allJobs.get(i).values();
+
+            for (String data : values) {
+                String data2 = data.toLowerCase();
+                String values_lower = value.toLowerCase();
+                if (data2.contains(values_lower)) {
+                    values2.add(values);
+                    break;
+                }
+            }++i;
+        } while (i < allJobs.size());
+
+        if (values2.size()==0){
+            System.out.println("No jobs found");
+        }
+
+        for (Collection<String> value1 : values2) {
+            int a = 0;
+            System.out.println("****************");
+            for (String datum : value1) {
+                Object[] types = keys.toArray();
+                System.out.println(types[a] + ": " + datum);
+                ++a;
+            }System.out.println("****************\n");
+        }return new ArrayList<HashMap<String, String>>();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
